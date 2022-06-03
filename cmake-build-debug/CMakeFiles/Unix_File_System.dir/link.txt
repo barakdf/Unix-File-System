@@ -1,0 +1,1 @@
+/usr/bin/cc -g   CMakeFiles/Unix_File_System.dir/main.c.o  -o Unix_File_System 

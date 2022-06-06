@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/Unix_File_System.dir/main.c.o"
+  "CMakeFiles/Unix_File_System.dir/ufs.c.o"
   "Unix_File_System"
   "Unix_File_System.pdb"
 )

@@ -150,6 +150,33 @@ main.c.s:
 	$(MAKE) -f CMakeFiles/Unix_File_System.dir/build.make CMakeFiles/Unix_File_System.dir/main.c.s
 .PHONY : main.c.s
 
+ufs.o: ufs.c.o
+
+.PHONY : ufs.o
+
+# target to build an object file
+ufs.c.o:
+	$(MAKE) -f CMakeFiles/Unix_File_System.dir/build.make CMakeFiles/Unix_File_System.dir/ufs.c.o
+.PHONY : ufs.c.o
+
+ufs.i: ufs.c.i
+
+.PHONY : ufs.i
+
+# target to preprocess a source file
+ufs.c.i:
+	$(MAKE) -f CMakeFiles/Unix_File_System.dir/build.make CMakeFiles/Unix_File_System.dir/ufs.c.i
+.PHONY : ufs.c.i
+
+ufs.s: ufs.c.s
+
+.PHONY : ufs.s
+
+# target to generate assembly for a file
+ufs.c.s:
+	$(MAKE) -f CMakeFiles/Unix_File_System.dir/build.make CMakeFiles/Unix_File_System.dir/ufs.c.s
+.PHONY : ufs.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -162,6 +189,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... ufs.o"
+	@echo "... ufs.i"
+	@echo "... ufs.s"
 .PHONY : help
 
 

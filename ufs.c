@@ -66,3 +66,10 @@ int mymount(const char *source, const char *target,
     return 0;
 }
 
+void print_fs() {
+    printf("SuperBlock info\n");
+    printf("\t num inodes %d\n", (sb.num_inodes));
+    printf("\t num blocks %d\n", (sb.num_blocks));
+    printf("\t size blocks %d\n", (sb.size_blocks));
+}
+

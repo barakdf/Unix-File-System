@@ -194,6 +194,7 @@ int add_open_file(int fd) {
         if(bool_open_files[i] == 0) {
             open_files[i].fd = fd;
             open_files[i].p_block = &dbs[inodes[fd].first_block];
+            open_files[i].num_block = 1;
             bool_open_files[i] = 1;
             if (i > max_open_indx) {
                 max_open_indx = i;
@@ -279,6 +280,11 @@ void strcat_c (char *str, char c)
     *str++ = 0;
 }
 
+void next_block(struct myopenfile* op) {
+    op->p_block = &dbs[op->p_block->next_block_num];
+    op->num_block++;
+}
+
 /** read from a file */
 ssize_t myread(int myfd, void *buf, size_t count) {
 
@@ -301,7 +307,7 @@ ssize_t myread(int myfd, void *buf, size_t count) {
             curr_file->pos++;
         }
         curr_file->pos = 0;
-        curr_file->p_block = &dbs[curr_file->p_block->next_block_num];
+        next_block(curr_file);
     }
     return strlen(buf);
 }
@@ -317,20 +323,23 @@ int extend_block(struct disk_block * block) {
     return -1;
 }
 
+
 /** write to a file */
 ssize_t mywrite(int myfd, const void *buf, size_t count) {
+    int buf_pointer = 0;
     char *buffer = (char *) buf;
     myopenfile *curr_file = find_opened_file(myfd);
     if(curr_file == NULL) {
         printf("File is not opened or does not exist\n");
-        exit(EXIT_FAILURE);
+        return buf_pointer;
     }
-    int buf_pointer = 0;
     while (buf_pointer < strlen(buffer)) {
         while (curr_file->pos < BLOCK_SIZE) {
             curr_file->p_block->data[curr_file->pos++] = buffer[buf_pointer++];
         }
         curr_file->pos = 0;
+
+        /* in case we need to extend the file length */
         if(curr_file->p_block->next_block_num == -2) {
             int find = extend_block(curr_file->p_block);
             if (find == -1) {
@@ -338,9 +347,45 @@ ssize_t mywrite(int myfd, const void *buf, size_t count) {
                 return buf_pointer;
             }
         }
-        curr_file->p_block = &dbs[curr_file->p_block->next_block_num];
+
+        next_block(curr_file);
     }
     return buf_pointer;
+}
+
+off_t mylseek(int myfd, off_t offset, int whence) {
+    struct myopenfile * curr_file = find_opened_file(myfd);
+    if(curr_file == NULL) {
+        printf("File is not opened or does not exist\n");
+        exit(EXIT_FAILURE);
+    }
+    off_t off = offset;
+
+    /* if the offset is from the current spot we add the offset to the pos
+     * if the offset is from the start spot we assign the offset to the pos */
+    if(whence == SEEK_CUR) {
+        curr_file->pos += off;
+        if(curr_file->pos < 0) {
+            curr_file->pos = 0;
+        }
+    }
+    else if(whence == SEEK_SET) {
+        if(off < 0) {
+            curr_file->pos = 0;
+        } else {
+            curr_file->pos = off;
+        }
+    }
+
+    curr_file->num_block = (curr_file->pos / BLOCK_SIZE) + 1;
+    curr_file->pos = (curr_file->pos % BLOCK_SIZE);
+    curr_file->p_block = &dbs[inodes[myfd].first_block];
+
+    for (int i = 0; i < curr_file->num_block - 1; ++i) {
+        next_block(curr_file);
+    }
+
+    return curr_file->pos;
 }
 
 struct mydirent *myreaddir(int fd) {

@@ -55,6 +55,7 @@ typedef struct myopenfile {
     int fd;
     int pos;
     disk_block *p_block;
+    int num_block;
 
 } myopenfile;
 
@@ -80,6 +81,9 @@ ssize_t myread(int myfd, void *buf, size_t count);
 ssize_t mywrite(int myfd, const void *buf, size_t count);
 
 /** move the adjusting pointer in a specific file */
+off_t mylseek(int myfd, off_t offset, int whence);
+
+/** move the write/read pointer */
 off_t mylseek(int myfd, off_t offset, int whence);
 
 struct mydirent *myreaddir(int fd);

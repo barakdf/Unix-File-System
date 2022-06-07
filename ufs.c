@@ -357,7 +357,7 @@ off_t mylseek(int myfd, off_t offset, int whence) {
     struct myopenfile * curr_file = find_opened_file(myfd);
     if(curr_file == NULL) {
         printf("File is not opened or does not exist\n");
-        exit(EXIT_FAILURE);
+        return -1;
     }
     off_t off = offset;
 

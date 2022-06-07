@@ -4,6 +4,7 @@
 
 #include "ufs.h"
 
+myopenfile open_files[MAX_FILES];
 int mkfs_bool = 0;
 
 
@@ -37,10 +38,7 @@ void mymkfs(int s) {
 
 }
 
-/** Load a File System */
-void mount_fs() {
 
-}
 
 /** write the File System */
 //void sync_fs() {
@@ -81,6 +79,7 @@ void load(const char *source) {
     fclose(t_file);
 }
 
+/** Load a File System */
 int mymount(const char *source, const char *target,
             const char *filesystemtype, unsigned long mountflags, const void *data) {
     if (source != NULL) {
@@ -148,5 +147,33 @@ int find_empty_block() {
     }
     printf("There is not a free block!\n");
     return -1;
+}
+
+void set_filesize(int file_num, int size) {
+    int temp = size + BLOCK_SIZE - 1;
+
+    int total_blocks = temp / BLOCK_SIZE;
+
+    int block_num = inodes[file_num].first_block;
+    total_blocks --;
+
+    /* in case we need to increase the file blocks */
+    while (total_blocks > 0) {
+        int next_block_n = dbs[block_num].next_block_num;
+        if( next_block_n == -2) {
+            int available_b = find_empty_block();
+            dbs[block_num].next_block_num = available_b;
+            dbs[available_b].next_block_num = -2;
+        }
+        // forwarding the current block_number;
+        block_num = dbs[block_num].next_block_num;
+        total_blocks--;
+    }
+    dbs[block_num].next_block_num = -1;
+
+}
+
+void write_byte (int file_num, int pos, char *data) {
+
 }
 

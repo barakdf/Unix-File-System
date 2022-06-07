@@ -7,6 +7,8 @@ int main() {
 
 
     mymount(NULL, "my_file.txt", NULL, NULL, NULL);
+    allocate_file("HELLO");
+    save("my_file.txt");
 //    mymount("my_file.txt", NULL, NULL, NULL, NULL);
     print_fs();
     return 0;

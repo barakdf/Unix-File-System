@@ -15,6 +15,12 @@
 #define MAX_FILES 10000
 
 enum inode_type{File, Directory};
+enum block_status{Used = -2, Free = -1};
+
+typedef struct myopenfile {
+    int fd;
+    int pos;
+} myopenfile;
 
 
 /** SuperBlock Struct :
@@ -54,18 +60,31 @@ disk_block *dbs;
 void mymkfs(int );
 
 /** Load a File System */
-void mount_fs();
-
-/** write the File System */
-void sync_fs();
-
-
 int mymount(const char *source, const char *target,
             const char *filesystemtype, unsigned long mountflags, const void *data);
 
+/** open a file */
+int myopen(const char *pathname, int flags);
+/** close a file */
+int myclose(int myfd);
+
+/** read from a file */
+ssize_t myread(int myfd, void *buf, size_t count);
+/** write to a file */
+ssize_t mywrite(int myfd, const void *buf, size_t count);
+
+/** move the adjusting pointer in a specific file */
+off_t mylseek(int myfd, off_t offset, int whence);
+
+//
+//
+//
 void print_fs();
 
+/** read a File System */
 void load(const char *);
+
+/** write the File System */
 void save(const char* target);
 
 /* @ allocate_file:
@@ -79,4 +98,8 @@ void save(const char* target);
 int allocate_file(char name[8]);
 int find_empty_inode();
 int find_empty_block();
+
+void set_filesize(int file_num, int size);
+void write_byte (int file_num, int pos, char *data);
+
 #endif //UNIX_FILE_SYSTEM_UFS_H

@@ -193,6 +193,7 @@ int add_open_file(int fd) {
     for (int i = 0; i < MAX_FILES; ++i) {
         if(bool_open_files[i] == 0) {
             open_files[i].fd = fd;
+            open_files[i].p_block = &dbs[inodes[fd].first_block];
             bool_open_files[i] = 1;
             if (i > max_open_indx) {
                 max_open_indx = i;
@@ -201,6 +202,15 @@ int add_open_file(int fd) {
         }
     }
     return -1;
+}
+
+struct myopenfile * find_opened_file(int fd) {
+    for (int i = 0; i < max_open_indx; ++i) {
+        if(bool_open_files[i]) {
+            return &open_files[i];
+        }
+    }
+    return NULL;
 }
 
 /** open a file */
@@ -259,6 +269,78 @@ int myclose(int myfd) {
         }
     }
     return -1;
+}
+/* single append char to str func,
+ * source : https://stackoverflow.com/questions/10279718/append-char-to-string-in-c*/
+void strcat_c (char *str, char c)
+{
+    for (;*str;str++);
+    *str++ = c;
+    *str++ = 0;
+}
+
+/** read from a file */
+ssize_t myread(int myfd, void *buf, size_t count) {
+
+    myopenfile *curr_file = find_opened_file(myfd);
+    if(curr_file == NULL) {
+        printf("File is not opened or does not exist\n");
+        exit(EXIT_FAILURE);
+    }
+    int space_left = BLOCK_SIZE - curr_file->pos;
+    int num_of_blocks;
+    if(count < space_left) {
+        num_of_blocks = 1;
+    } else {
+        num_of_blocks = (((int )count - space_left)/BLOCK_SIZE) + 1;
+    }
+//    int curr_block = inodes[myfd].first_block;
+    for (int i = 0; i < num_of_blocks; ++i) {
+        while (curr_file->pos < BLOCK_SIZE) {
+            strcat_c(buf, curr_file->p_block->data[curr_file->pos]);
+            curr_file->pos++;
+        }
+        curr_file->pos = 0;
+        curr_file->p_block = &dbs[curr_file->p_block->next_block_num];
+    }
+    return strlen(buf);
+}
+
+int extend_block(struct disk_block * block) {
+    for (int i = 0; i < sb.num_blocks; ++i) {
+        if(dbs[i].next_block_num == -1) {
+            block->next_block_num = i;
+            dbs[i].next_block_num = -2;
+            return 0;
+        }
+    }
+    return -1;
+}
+
+/** write to a file */
+ssize_t mywrite(int myfd, const void *buf, size_t count) {
+    char *buffer = (char *) buf;
+    myopenfile *curr_file = find_opened_file(myfd);
+    if(curr_file == NULL) {
+        printf("File is not opened or does not exist\n");
+        exit(EXIT_FAILURE);
+    }
+    int buf_pointer = 0;
+    while (buf_pointer < strlen(buffer)) {
+        while (curr_file->pos < BLOCK_SIZE) {
+            curr_file->p_block->data[curr_file->pos++] = buffer[buf_pointer++];
+        }
+        curr_file->pos = 0;
+        if(curr_file->p_block->next_block_num == -2) {
+            int find = extend_block(curr_file->p_block);
+            if (find == -1) {
+                printf("Not enough space\n");
+                return buf_pointer;
+            }
+        }
+        curr_file->p_block = &dbs[curr_file->p_block->next_block_num];
+    }
+    return buf_pointer;
 }
 
 struct mydirent *myreaddir(int fd) {

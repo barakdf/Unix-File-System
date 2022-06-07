@@ -17,10 +17,7 @@
 enum inode_type{File, Directory};
 enum block_status{Used = -2, Free = -1};
 
-typedef struct myopenfile {
-    int fd;
-    int pos;
-} myopenfile;
+
 
 
 /** SuperBlock Struct :
@@ -53,6 +50,13 @@ typedef struct mydirent {
     struct inode d_Inodes[MAX_FILES];
     
 }mydirent;
+
+typedef struct myopenfile {
+    int fd;
+    int pos;
+    disk_block *p_block;
+
+} myopenfile;
 
 superBlock sb;
 inode *inodes;

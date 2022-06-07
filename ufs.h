@@ -25,7 +25,7 @@ typedef struct myopenfile {
 
 /** SuperBlock Struct :
  *      meta info about the file system
- *      number of inodes
+ *      number of d_Inodes
  *      number of disk blocks
  *      size of the disk blocks*/
 typedef struct superBlock {
@@ -48,7 +48,9 @@ typedef struct disk_block{
 } disk_block;
 
 typedef struct mydirent {
+    int num_of_files;
     char d_name[NAME_SIZE];
+    struct inode d_Inodes[MAX_FILES];
     
 }mydirent;
 
@@ -76,6 +78,7 @@ ssize_t mywrite(int myfd, const void *buf, size_t count);
 /** move the adjusting pointer in a specific file */
 off_t mylseek(int myfd, off_t offset, int whence);
 
+struct mydirent *myreaddir(int fd);
 //
 //
 //

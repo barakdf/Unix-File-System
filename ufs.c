@@ -5,6 +5,8 @@
 #include "ufs.h"
 
 myopenfile open_files[MAX_FILES];
+int bool_open_files[MAX_FILES];
+int max_open_indx;
 int mkfs_bool = 0;
 
 
@@ -19,7 +21,7 @@ void mymkfs(int s) {
     sb.num_blocks = blocks_capacity / (sizeof(struct disk_block));
     sb.size_blocks = sizeof(struct disk_block);
 
-    /* allocate memory for inodes */
+    /* allocate memory for d_Inodes */
     inodes = malloc(sizeof(struct inode) * sb.num_inodes);
 
     for (int i = 0; i < sb.num_inodes; ++i) {
@@ -68,7 +70,7 @@ void load(const char *source) {
     fread(&sb, sizeof(struct superBlock), 1, t_file);
 
     /* read each inode by order */
-    printf("num of inodes: %d\n", sb.num_inodes);
+    printf("num of d_Inodes: %d\n", sb.num_inodes);
     for (int i = 0; i < sb.num_inodes; ++i) {
         fread(&(inodes[i]), sizeof(struct inode), 1, t_file);
     }
@@ -95,12 +97,13 @@ int mymount(const char *source, const char *target,
 }
 
 void print_fs() {
+//    printf("Max is : %d\n", max_open_indx);
     printf("SuperBlock info\n");
-    printf("\t num inodes %d\n", (sb.num_inodes));
+    printf("\t num d_Inodes %d\n", (sb.num_inodes));
     printf("\t num blocks %d\n", (sb.num_blocks));
     printf("\t size blocks %d\n", (sb.size_blocks));
 
-    printf("inodes\n");
+    printf("d_Inodes\n");
     for (int i = 0; i < sb.num_inodes; ++i) {
         printf("\tblock size: %d || block : %d || name: %s\n", inodes[i].size, inodes[i].first_block, inodes[i].name);
     }
@@ -174,6 +177,91 @@ void set_filesize(int file_num, int size) {
 }
 
 void write_byte (int file_num, int pos, char *data) {
+
+}
+
+int find_inode(char name[8]) {
+    for (int i = 0; i < sb.num_inodes; ++i) {
+        if(strcmp(inodes[i].name, name) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int add_open_file(int fd) {
+    for (int i = 0; i < MAX_FILES; ++i) {
+        if(bool_open_files[i] == 0) {
+            open_files[i].fd = fd;
+            bool_open_files[i] = 1;
+            if (i > max_open_indx) {
+                max_open_indx = i;
+            }
+            return 0;
+        }
+    }
+    return -1;
+}
+
+/** open a file */
+int myopen(const char *pathname, int flags) {
+
+    char path[80] = "";
+    strcpy(path,pathname);
+    int curr_fd;
+    char *token;
+    token = strtok(path, "/");
+    curr_fd = find_inode(token);
+    while (token != NULL) {
+        if (curr_fd == -1) {
+
+        }
+        if (inodes[curr_fd].type == Directory) {
+            token = strtok(NULL, "/");
+            if (token == NULL) {
+                printf("Path given is not a file!\n");
+                exit(EXIT_FAILURE);
+            }
+            mydirent * curr_dir = myreaddir(curr_fd);
+            int found = 0;
+            for (int i = 0; i < curr_dir->num_of_files ; ++i) {
+                if (curr_dir->d_Inodes[i].name == token) {
+                    curr_fd = find_inode(token);
+                    found = 1;
+                }
+            }
+            if (!found) {
+                printf("Did not find the inode in the directory\n");
+                exit(EXIT_FAILURE);
+            }
+        } else {
+            int add = add_open_file(curr_fd);
+            if (add == -1) {
+                printf("Not enough place for open files!\n");
+            }
+            return curr_fd;
+        }
+    }
+    return -1;
+}
+
+/** close a file */
+/** Iterate over the open_files bitmap, when we find the requested fd
+     * we change his status to free, and the openfile struct -> fd to be -1, and return 0 for success.
+     * If not found, return -1*/
+int myclose(int myfd) {
+
+    for (int i = 0; i < max_open_indx; ++i) {
+        if(bool_open_files[i] == 1 && (open_files[i].fd == myfd)) {
+            bool_open_files[i] = 0;
+            open_files[i].fd = -1;
+            return 0;
+        }
+    }
+    return -1;
+}
+
+struct mydirent *myreaddir(int fd) {
 
 }
 

@@ -9,6 +9,7 @@
 #include "string.h"
 #include "stdio.h"
 
+
 #define NAME_SIZE 8
 #define BLOCK_SIZE 512
 #define MAX_FILES 10000
@@ -30,6 +31,7 @@ typedef struct superBlock {
 
 typedef struct inode {
     int size;
+    int first_block;
     char name[NAME_SIZE];
     int type;
 } inode;
@@ -43,6 +45,7 @@ typedef struct mydirent {
     char d_name[NAME_SIZE];
     
 }mydirent;
+
 superBlock sb;
 inode *inodes;
 disk_block *dbs;
@@ -60,4 +63,20 @@ void sync_fs();
 int mymount(const char *source, const char *target,
             const char *filesystemtype, unsigned long mountflags, const void *data);
 
+void print_fs();
+
+void load(const char *);
+void save(const char* target);
+
+/* @ allocate_file:
+ *      - find an empty inode
+ *      - claim it
+ *      - find\claim a disk block
+ *      - return the file descriptor
+ *
+ * In function CALLS -> (@find_empty_node, @find_empty_block)
+ * */
+int allocate_file(char name[8]);
+int find_empty_inode();
+int find_empty_block();
 #endif //UNIX_FILE_SYSTEM_UFS_H

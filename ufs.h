@@ -15,7 +15,8 @@
 #define MAX_FILES 10000
 
 enum inode_type{File, Directory};
-enum block_status{Used = -2, Free = -1};
+enum block_status{USED = -2, Free = -1};
+
 
 
 
@@ -47,21 +48,21 @@ typedef struct disk_block{
 typedef struct mydirent {
     int num_of_files;
     char d_name[NAME_SIZE];
-    struct inode d_Inodes[MAX_FILES];
+    struct inode *d_Inodes[BLOCK_SIZE/8];
     
 }mydirent;
 
 typedef struct myopenfile {
     int fd;
     int pos;
-    disk_block *p_block;
     int num_block;
+    disk_block *p_block;
 
-} myopenfile;
+} myopenfile; // 1= [.......p.....] 2= [............] 3= [............] // SEEK_SET, SEEK_CURR SEEK_END
 
 superBlock sb;
 inode *inodes;
-disk_block *dbs;
+void *dbs;
 
 /** Initialize new File System */
 void mymkfs(int );
@@ -70,7 +71,7 @@ void mymkfs(int );
 int mymount(const char *source, const char *target,
             const char *filesystemtype, unsigned long mountflags, const void *data);
 
-/** open a file */
+/** open a file and return fd, if do not success, return -1 */
 int myopen(const char *pathname, int flags);
 /** close a file */
 int myclose(int myfd);
@@ -86,6 +87,7 @@ off_t mylseek(int myfd, off_t offset, int whence);
 /** move the write/read pointer */
 off_t mylseek(int myfd, off_t offset, int whence);
 
+int myopendir(const char *name);
 struct mydirent *myreaddir(int fd);
 //
 //

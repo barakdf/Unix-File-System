@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/c/Users/barak/Documents/GitHub/Unix-File-System
+CMAKE_SOURCE_DIR = /mnt/c/Users/97252/Documents/GitHub/Unix-File-System
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/c/Users/barak/Documents/GitHub/Unix-File-System/cmake-build-debug
+CMAKE_BINARY_DIR = /mnt/c/Users/97252/Documents/GitHub/Unix-File-System/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/barak/Documents/GitHub/Unix-File-System/cmake-build-debug/CMakeFiles /mnt/c/Users/barak/Documents/GitHub/Unix-File-System/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/97252/Documents/GitHub/Unix-File-System/cmake-build-debug/CMakeFiles /mnt/c/Users/97252/Documents/GitHub/Unix-File-System/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/barak/Documents/GitHub/Unix-File-System/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/97252/Documents/GitHub/Unix-File-System/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -150,6 +150,33 @@ main.c.s:
 	$(MAKE) -f CMakeFiles/Unix_File_System.dir/build.make CMakeFiles/Unix_File_System.dir/main.c.s
 .PHONY : main.c.s
 
+myfile.o: myfile.c.o
+
+.PHONY : myfile.o
+
+# target to build an object file
+myfile.c.o:
+	$(MAKE) -f CMakeFiles/Unix_File_System.dir/build.make CMakeFiles/Unix_File_System.dir/myfile.c.o
+.PHONY : myfile.c.o
+
+myfile.i: myfile.c.i
+
+.PHONY : myfile.i
+
+# target to preprocess a source file
+myfile.c.i:
+	$(MAKE) -f CMakeFiles/Unix_File_System.dir/build.make CMakeFiles/Unix_File_System.dir/myfile.c.i
+.PHONY : myfile.c.i
+
+myfile.s: myfile.c.s
+
+.PHONY : myfile.s
+
+# target to generate assembly for a file
+myfile.c.s:
+	$(MAKE) -f CMakeFiles/Unix_File_System.dir/build.make CMakeFiles/Unix_File_System.dir/myfile.c.s
+.PHONY : myfile.c.s
+
 ufs.o: ufs.c.o
 
 .PHONY : ufs.o
@@ -189,6 +216,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... myfile.o"
+	@echo "... myfile.i"
+	@echo "... myfile.s"
 	@echo "... ufs.o"
 	@echo "... ufs.i"
 	@echo "... ufs.s"

@@ -36,10 +36,10 @@ void mymkfs(int s) {
     }
     OFF_SET_BLOCK = sizeof(struct disk_block);
     dbs = malloc(sizeof(struct disk_block) * sb.num_blocks);
-    memset(dbs,0,sizeof(struct disk_block) * sb.num_blocks);
+    memset(dbs, 0, sizeof(struct disk_block) * sb.num_blocks);
 
     for (int i = 0; i < sb.num_blocks; ++i) {
-        disk_block *disk = (struct disk_block *) &dbs[i*OFF_SET_BLOCK];
+        disk_block *disk = (struct disk_block *) &dbs[i * OFF_SET_BLOCK];
         disk->next_block_num = -1;
         strcpy(disk->data, "");
     }
@@ -71,15 +71,13 @@ void save(const char *target) {
     fwrite(&sb, sizeof(struct superBlock), 1, s_file);
 
     /* write each inode by order */
-    for (int i = 0; i < sb.num_inodes; ++i) {
-        fwrite(&(inodes[i]), sizeof(struct inode), 1, s_file);
-    }
+        fwrite(inodes, sizeof(struct inode)*sb.num_inodes, 1, s_file);
+
     /* write each block by order */
-    for (int i = 0; i < sb.num_blocks; ++i) {
-        disk_block *disk_temp = (struct disk_block *) &dbs[i*OFF_SET_BLOCK];
-        printf("%s\n",&dbs[i*OFF_SET_BLOCK]);
-        fwrite((char *)&dbs[i*OFF_SET_BLOCK], OFF_SET_BLOCK, 1, s_file);
-    }
+//        disk_block *disk_temp = (struct disk_block *) &dbs[i * OFF_SET_BLOCK];
+//        printf("%s\n", &dbs[i * OFF_SET_BLOCK]);
+        fwrite(dbs, OFF_SET_BLOCK * sb.num_blocks, 1, s_file);
+
 
     fclose(s_file);
 }
@@ -91,24 +89,23 @@ void load(const char *source) {
 
     fread(&sb, sizeof(struct superBlock), 1, t_file);
 
-    /* read each inode by order */
+    /* allocate memory from inodes and blocks, receive data from super block  */
     inodes = malloc(sizeof(struct inode) * sb.num_inodes);
+    dbs = malloc(OFF_SET_BLOCK * sb.num_blocks);
 
     printf("num of d_Inodes: %d\n", sb.num_inodes);
 
 
-    for (int i = 0; i < sb.num_inodes; ++i) {
-        fread(&(inodes[i]), sizeof(struct inode), 1, t_file);
 
-    }
+
     /* read each block by order */
-    OFF_SET_BLOCK = (sizeof(struct disk_block));
-    dbs = malloc(sizeof(struct disk_block) * sb.num_blocks);
-    for (int i = 0; i < sb.num_blocks; i += OFF_SET_BLOCK) {
-        disk_block *disk_temp = (struct disk_block *) &dbs[i];
-        printf("Hellooooo\n");
-        fread((disk_temp), sizeof(struct disk_block), 1, t_file);
-    }
+//    OFF_SET_BLOCK = (sizeof(struct disk_block));
+//    disk_block *disk_temp = (struct disk_block *) &dbs[i];
+    printf("Hellooooo\n");
+
+    fread(inodes, sizeof(struct inode) * sb.num_inodes, 1, t_file);
+    fread(dbs, OFF_SET_BLOCK * sb.num_blocks, 1, t_file);
+
     fclose(t_file);
 }
 
@@ -145,7 +142,7 @@ void print_fs() {
 
     printf("blocks\n");
     for (int i = 0; i < sb.num_blocks; ++i) {
-        printf("\tblock num: %d || block data %s   -, %d\n", i, (char *)&dbs[inodes[1].first_block], OFF_SET_BLOCK);
+        printf("\tblock num: %d || block data %s   -, %d\n", i, (char *) &dbs[inodes[1].first_block], OFF_SET_BLOCK);
     }
 }
 
@@ -302,11 +299,12 @@ int myopen(const char *pathname, int flags) {
     // temp_path = { [], [], [],...}
     /** Handle only with the directories */
     for (int p = 1; p < dir_counter - 1; ++p) {
-        mydirent *curr_directory = (struct mydirent *) &dbs[curr_dir_inode->first_block * OFF_SET_BLOCK];
+        mydirent *curr_directory = (struct mydirent *) &dbs[curr_dir_inode->first_block];
         printf("name of dir %s\n", curr_directory->d_name);
         /** Iterate over the directory files, and check if the current path argument is present */
         for (int j = 0; j < curr_directory->num_of_files; ++j) {
             // if we find the file
+            printf("name of dir child -> %s\n", curr_directory->d_Inodes[j]->name);
             if (strcmp(curr_directory->d_Inodes[j]->name, temp_path[p]) == 0) {
                 curr_fd = find_inode(temp_path[p]);
 
@@ -336,7 +334,7 @@ int myopen(const char *pathname, int flags) {
 
             /** update new inode address to inode array of the current directory , assign the dir_fd */
 
-            printf("%d\n",curr_directory->num_of_files);
+            printf("%d\n", curr_directory->num_of_files);
             curr_directory->d_Inodes[curr_directory->num_of_files] = &inodes[dir_fd];
             curr_directory->num_of_files++;
 
@@ -350,7 +348,7 @@ int myopen(const char *pathname, int flags) {
 
     /** Handle with file itself */
     printf("CHECK _FD: %d\n", curr_fd);
-    mydirent *curr_directory = (struct mydirent *) &dbs[curr_dir_inode->first_block*OFF_SET_BLOCK];
+    mydirent *curr_directory = (struct mydirent *) &dbs[curr_dir_inode->first_block * OFF_SET_BLOCK];
     printf("CHECK_num files %d\n", curr_directory->num_of_files);
     curr_fd = -1;
     for (int j = 0; j < curr_directory->num_of_files; ++j) {
@@ -375,7 +373,7 @@ int myopen(const char *pathname, int flags) {
             return -1;
         }
         curr_fd = file_fd;
-        printf("file_fd: %d\n",curr_fd);
+        printf("file_fd: %d\n", curr_fd);
     }
 
 
@@ -546,7 +544,7 @@ int myopendir(const char *name) {
 
     printf("AVAILABLE INODE: %d, BLOCK:%d\n", available_inode, available_block);
     inodes[available_inode].first_block = available_block;
-    mydirent *temp = (struct mydirent *)&dbs[available_block*OFF_SET_BLOCK];
+    mydirent *temp = (struct mydirent *) &dbs[available_block * OFF_SET_BLOCK];
     temp->num_of_files = 0;
     strcpy(temp->d_name, name);
 

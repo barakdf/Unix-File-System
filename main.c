@@ -10,6 +10,8 @@ int main() {
 //    mymount(NULL, "my_file.txt", NULL, NULL, NULL);
 //    allocate_file("hello");
     myopen("root/hello/OKOKOK", O_CREAT);
+    myopen("root/hello/SABABA", O_CREAT);
+
     print_fs();
     save("my_file.txt");
 ////    mymount("my_file.txt", NULL, NULL, NULL, NULL);

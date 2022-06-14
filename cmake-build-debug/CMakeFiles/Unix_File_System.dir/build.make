@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/c/Users/97252/Documents/GitHub/Unix-File-System
+CMAKE_SOURCE_DIR = /mnt/c/Users/barak/Documents/GitHub/Unix-File-System
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/c/Users/97252/Documents/GitHub/Unix-File-System/cmake-build-debug
+CMAKE_BINARY_DIR = /mnt/c/Users/barak/Documents/GitHub/Unix-File-System/cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/Unix_File_System.dir/depend.make
@@ -59,42 +59,42 @@ include CMakeFiles/Unix_File_System.dir/flags.make
 
 CMakeFiles/Unix_File_System.dir/main.c.o: CMakeFiles/Unix_File_System.dir/flags.make
 CMakeFiles/Unix_File_System.dir/main.c.o: ../main.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/97252/Documents/GitHub/Unix-File-System/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/Unix_File_System.dir/main.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/Unix_File_System.dir/main.c.o   -c /mnt/c/Users/97252/Documents/GitHub/Unix-File-System/main.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/barak/Documents/GitHub/Unix-File-System/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/Unix_File_System.dir/main.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/Unix_File_System.dir/main.c.o   -c /mnt/c/Users/barak/Documents/GitHub/Unix-File-System/main.c
 
 CMakeFiles/Unix_File_System.dir/main.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/Unix_File_System.dir/main.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/97252/Documents/GitHub/Unix-File-System/main.c > CMakeFiles/Unix_File_System.dir/main.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/barak/Documents/GitHub/Unix-File-System/main.c > CMakeFiles/Unix_File_System.dir/main.c.i
 
 CMakeFiles/Unix_File_System.dir/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/Unix_File_System.dir/main.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/97252/Documents/GitHub/Unix-File-System/main.c -o CMakeFiles/Unix_File_System.dir/main.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/barak/Documents/GitHub/Unix-File-System/main.c -o CMakeFiles/Unix_File_System.dir/main.c.s
 
 CMakeFiles/Unix_File_System.dir/ufs.c.o: CMakeFiles/Unix_File_System.dir/flags.make
 CMakeFiles/Unix_File_System.dir/ufs.c.o: ../ufs.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/97252/Documents/GitHub/Unix-File-System/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/Unix_File_System.dir/ufs.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/Unix_File_System.dir/ufs.c.o   -c /mnt/c/Users/97252/Documents/GitHub/Unix-File-System/ufs.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/barak/Documents/GitHub/Unix-File-System/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/Unix_File_System.dir/ufs.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/Unix_File_System.dir/ufs.c.o   -c /mnt/c/Users/barak/Documents/GitHub/Unix-File-System/ufs.c
 
 CMakeFiles/Unix_File_System.dir/ufs.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/Unix_File_System.dir/ufs.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/97252/Documents/GitHub/Unix-File-System/ufs.c > CMakeFiles/Unix_File_System.dir/ufs.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/barak/Documents/GitHub/Unix-File-System/ufs.c > CMakeFiles/Unix_File_System.dir/ufs.c.i
 
 CMakeFiles/Unix_File_System.dir/ufs.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/Unix_File_System.dir/ufs.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/97252/Documents/GitHub/Unix-File-System/ufs.c -o CMakeFiles/Unix_File_System.dir/ufs.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/barak/Documents/GitHub/Unix-File-System/ufs.c -o CMakeFiles/Unix_File_System.dir/ufs.c.s
 
 CMakeFiles/Unix_File_System.dir/myfile.c.o: CMakeFiles/Unix_File_System.dir/flags.make
 CMakeFiles/Unix_File_System.dir/myfile.c.o: ../myfile.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/97252/Documents/GitHub/Unix-File-System/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/Unix_File_System.dir/myfile.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/Unix_File_System.dir/myfile.c.o   -c /mnt/c/Users/97252/Documents/GitHub/Unix-File-System/myfile.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/barak/Documents/GitHub/Unix-File-System/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/Unix_File_System.dir/myfile.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/Unix_File_System.dir/myfile.c.o   -c /mnt/c/Users/barak/Documents/GitHub/Unix-File-System/myfile.c
 
 CMakeFiles/Unix_File_System.dir/myfile.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/Unix_File_System.dir/myfile.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/97252/Documents/GitHub/Unix-File-System/myfile.c > CMakeFiles/Unix_File_System.dir/myfile.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/barak/Documents/GitHub/Unix-File-System/myfile.c > CMakeFiles/Unix_File_System.dir/myfile.c.i
 
 CMakeFiles/Unix_File_System.dir/myfile.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/Unix_File_System.dir/myfile.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/97252/Documents/GitHub/Unix-File-System/myfile.c -o CMakeFiles/Unix_File_System.dir/myfile.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/barak/Documents/GitHub/Unix-File-System/myfile.c -o CMakeFiles/Unix_File_System.dir/myfile.c.s
 
 # Object files for target Unix_File_System
 Unix_File_System_OBJECTS = \
@@ -110,7 +110,7 @@ Unix_File_System: CMakeFiles/Unix_File_System.dir/ufs.c.o
 Unix_File_System: CMakeFiles/Unix_File_System.dir/myfile.c.o
 Unix_File_System: CMakeFiles/Unix_File_System.dir/build.make
 Unix_File_System: CMakeFiles/Unix_File_System.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/Users/97252/Documents/GitHub/Unix-File-System/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking C executable Unix_File_System"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/Users/barak/Documents/GitHub/Unix-File-System/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking C executable Unix_File_System"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Unix_File_System.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -123,6 +123,6 @@ CMakeFiles/Unix_File_System.dir/clean:
 .PHONY : CMakeFiles/Unix_File_System.dir/clean
 
 CMakeFiles/Unix_File_System.dir/depend:
-	cd /mnt/c/Users/97252/Documents/GitHub/Unix-File-System/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /mnt/c/Users/97252/Documents/GitHub/Unix-File-System /mnt/c/Users/97252/Documents/GitHub/Unix-File-System /mnt/c/Users/97252/Documents/GitHub/Unix-File-System/cmake-build-debug /mnt/c/Users/97252/Documents/GitHub/Unix-File-System/cmake-build-debug /mnt/c/Users/97252/Documents/GitHub/Unix-File-System/cmake-build-debug/CMakeFiles/Unix_File_System.dir/DependInfo.cmake --color=$(COLOR)
+	cd /mnt/c/Users/barak/Documents/GitHub/Unix-File-System/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /mnt/c/Users/barak/Documents/GitHub/Unix-File-System /mnt/c/Users/barak/Documents/GitHub/Unix-File-System /mnt/c/Users/barak/Documents/GitHub/Unix-File-System/cmake-build-debug /mnt/c/Users/barak/Documents/GitHub/Unix-File-System/cmake-build-debug /mnt/c/Users/barak/Documents/GitHub/Unix-File-System/cmake-build-debug/CMakeFiles/Unix_File_System.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/Unix_File_System.dir/depend
 

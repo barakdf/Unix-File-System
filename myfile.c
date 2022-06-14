@@ -115,7 +115,7 @@ myFILE *myfopen(const char *pathname, const char *mode) {
         } else {
             my_File->seek_pos = 0;
         }
-        if(strcmp(mode, "r+") == 0) {
+        if (strcmp(mode, "r+") == 0) {
             my_File->mode = R_P;
         }
     }
@@ -125,7 +125,7 @@ myFILE *myfopen(const char *pathname, const char *mode) {
 int myfclose(myFILE *stream) {
     /** if the mode is applying writing, then we need to write the changes to the source file,
      * if the writing failed -> return -1 for failure */
-    if(stream->mode == A || stream->mode == W) {
+    if (stream->mode == A || stream->mode == W) {
         if (write_data(stream->fd, stream->data, stream->size) == -1) {
             return -1;
         }
@@ -135,4 +135,79 @@ int myfclose(myFILE *stream) {
     free(stream);
     return 1;
 
+}
+
+
+size_t myfread(void *ptr, size_t size, size_t nmemb, myFILE *stream) {
+
+    /** size of total read length */
+    int len = (int) (size * nmemb) + 1;
+    char *buf = malloc(len);
+    int pos = stream->seek_pos;
+    for (int i = 0; i < len; ++i) {
+        if (stream->seek_pos + i > stream->size) {
+            break;
+        }
+        buf[i] = stream->data[stream->seek_pos + i];
+        pos++;
+    }
+    stream->seek_pos = pos;
+    buf[len] = 0;
+    strncpy(ptr, buf, len);
+    free(buf);
+
+    return stream->seek_pos;
+
+}
+
+size_t myfwrite(const void *ptr, size_t size, size_t nmemb, myFILE *stream) {
+    if (stream->mode == R) {
+        printf("Wrong Flag, could not write data to file\n");
+        return -1;
+    }
+    int len = size * nmemb;
+    char *buf = (char *) ptr;
+
+    /** if len of writing buf is exceeding the current stream data buffer,
+     * increase the length of stream data, using a temporary buf*/
+    if (stream->seek_pos + len > stream->size) {
+        //allocate mem for temp and copy data from the stream
+        char *temp = malloc(stream->size + 1);
+        for (size_t i = 0; i < stream->size; ++i) {
+            temp[i] = stream->data[i];
+        }
+        //free stream data
+        free(stream->data);
+        //allocate larger mem size for data
+        stream->data = malloc(stream->size + len);
+        //copy back the data content
+        for (size_t i = 0; i < stream->size; ++i) {
+            stream->data[i] = temp[i];
+        }
+        // we don't need temporary buf anymore, free.
+        free(temp);
+    }
+    int pos = stream->seek_pos;
+    /** write the buf to the data from curr pointer*/
+    for (size_t i = 0; i < len; ++i) {
+        stream->data[stream->seek_pos + i] = buf[i];
+        pos++;
+    }
+    stream->seek_pos = pos;
+    return stream->seek_pos;
+}
+
+int myfseek(myFILE *stream, long offset, int whence) {
+    if(whence == SEEK_CUR) {
+        stream->seek_pos += offset;
+    } else if(whence == SEEK_END) {
+        stream->seek_pos = stream->size + offset;
+    } else if(whence == SEEK_SET) {
+        stream->seek_pos = offset;
+    }
+    // if the offset moved the seek pointer below zero.
+    if(stream->seek_pos < 0) {
+        stream->seek_pos = 0;
+    }
+    return stream->seek_pos;
 }

@@ -9,7 +9,6 @@ myopenfile open_files[MAX_FILES];
 int bool_open_files[MAX_FILES];
 int max_open_indx;
 int mkfs_bool = 0;
-int *bitmap_blocks;
 int OFF_SET_BLOCK;
 
 

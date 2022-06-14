@@ -17,6 +17,9 @@
 enum inode_type{File, Directory};
 enum block_status{USED = -2, Free = -1};
 
+int *bitmap_blocks;
+
+
 
 
 

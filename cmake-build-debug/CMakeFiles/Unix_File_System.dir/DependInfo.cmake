@@ -4,9 +4,9 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/mnt/c/Users/97252/Documents/GitHub/Unix-File-System/main.c" "/mnt/c/Users/97252/Documents/GitHub/Unix-File-System/cmake-build-debug/CMakeFiles/Unix_File_System.dir/main.c.o"
-  "/mnt/c/Users/97252/Documents/GitHub/Unix-File-System/myfile.c" "/mnt/c/Users/97252/Documents/GitHub/Unix-File-System/cmake-build-debug/CMakeFiles/Unix_File_System.dir/myfile.c.o"
-  "/mnt/c/Users/97252/Documents/GitHub/Unix-File-System/ufs.c" "/mnt/c/Users/97252/Documents/GitHub/Unix-File-System/cmake-build-debug/CMakeFiles/Unix_File_System.dir/ufs.c.o"
+  "/mnt/c/Users/barak/Documents/GitHub/Unix-File-System/main.c" "/mnt/c/Users/barak/Documents/GitHub/Unix-File-System/cmake-build-debug/CMakeFiles/Unix_File_System.dir/main.c.o"
+  "/mnt/c/Users/barak/Documents/GitHub/Unix-File-System/myfile.c" "/mnt/c/Users/barak/Documents/GitHub/Unix-File-System/cmake-build-debug/CMakeFiles/Unix_File_System.dir/myfile.c.o"
+  "/mnt/c/Users/barak/Documents/GitHub/Unix-File-System/ufs.c" "/mnt/c/Users/barak/Documents/GitHub/Unix-File-System/cmake-build-debug/CMakeFiles/Unix_File_System.dir/ufs.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

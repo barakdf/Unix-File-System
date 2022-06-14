@@ -17,7 +17,7 @@
 enum inode_type{File, Directory};
 enum block_status{USED = -2, Free = -1};
 
-int *bitmap_blocks;
+int bitmap_blocks[MAX_FILES];
 
 
 
@@ -51,7 +51,7 @@ typedef struct disk_block{
 typedef struct mydirent {
     int num_of_files;
     char d_name[NAME_SIZE];
-    struct inode *d_Inodes[BLOCK_SIZE/8];
+    int d_fds[10];
     
 }mydirent;
 
@@ -114,6 +114,7 @@ void save(const char* target);
 int allocate_file(char name[8]);
 int find_empty_inode();
 int find_empty_block();
+int destroy_mkfs();
 
 void set_filesize(int file_num, int size);
 void write_byte (int file_num, int pos, char *data);

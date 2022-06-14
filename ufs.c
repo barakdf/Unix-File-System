@@ -1,4 +1,4 @@
-
+//
 // Created by barak on 06/06/2022.
 //
 
@@ -24,7 +24,7 @@ void mymkfs(int s) {
     sb.num_blocks = blocks_capacity / (sizeof(struct disk_block));
     sb.size_blocks = sizeof(struct disk_block);
 
-    bitmap_blocks = malloc(sizeof(int) * sb.num_blocks);
+//    bitmap_blocks = malloc(sizeof(int) * sb.num_blocks);
 
     /* allocate memory for d_Inodes */
     inodes = malloc(sizeof(struct inode) * sb.num_inodes);
@@ -69,18 +69,19 @@ void mymkfs(int s) {
 //}
 void save(const char *target) {
     FILE *s_file;
+    printf("Saving file\n");
     s_file = fopen(target, "w");
 //        fwrite("hello", 1,5,s_file);
     fwrite(&sb, sizeof(struct superBlock), 1, s_file);
 
     /* write each inode by order */
-        fwrite(inodes, sizeof(struct inode)*sb.num_inodes, 1, s_file);
+        fwrite(inodes, sizeof(struct inode), sb.num_inodes, s_file);
 
     /* write each block by order */
 //        disk_block *disk_temp = (struct disk_block *) &dbs[i * OFF_SET_BLOCK];
 //        printf("%s\n", &dbs[i * OFF_SET_BLOCK]);
-    fwrite(dbs, sizeof (struct disk_block)* sb.num_blocks, 1, s_file);
-
+    fwrite(dbs, sizeof (struct disk_block), sb.num_blocks, s_file);
+    fseek(s_file, 0, SEEK_SET);
 
     fclose(s_file);
 }
@@ -88,13 +89,14 @@ void save(const char *target) {
 void load(const char *source) {
     FILE *t_file;
     t_file = fopen(source, "r");
-    bitmap_blocks = malloc(sizeof(int) * sb.num_blocks);
+//    bitmap_blocks = malloc(sb.num_blocks);
 
     fread(&sb, sizeof(struct superBlock), 1, t_file);
 
     /* allocate memory from inodes and blocks, receive data from super block  */
-    inodes = malloc(sizeof(struct inode) * sb.num_inodes);
-    dbs = malloc(OFF_SET_BLOCK * sb.num_blocks);
+    inodes = malloc(sizeof(struct inode) * (sb.num_inodes+1));
+    dbs = malloc(sizeof (struct disk_block)* (sb.num_blocks));
+    memset(dbs,0,sizeof (struct disk_block)* (sb.num_blocks));
 
     printf("num of d_Inodes: %d\n", sb.num_inodes);
 
@@ -104,11 +106,15 @@ void load(const char *source) {
     /* read each block by order */
 //    OFF_SET_BLOCK = (sizeof(struct disk_block));
 //    disk_block *disk_temp = (struct disk_block *) &dbs[i];
+
+    fread(inodes, sizeof(struct inode) , sb.num_inodes, t_file);
+    printf("check %d\n",sb.num_blocks);
+    fread(dbs, (sizeof (struct disk_block))*(sb.num_blocks - 1),1 , t_file);
     printf("Hellooooo\n");
+    fseek(t_file, 0, SEEK_SET);
+    fclose(t_file);
 
-    fread(inodes, sizeof(struct inode) * sb.num_inodes, 1, t_file);
-    fread(dbs, sizeof (struct disk_block) * sb.num_blocks, 1, t_file);
-
+    printf("num of blocks %d\n", sb.num_blocks);
     for (int i = 0; i < sb.num_blocks; ++i) {
         if (dbs[i].next_block_num == -1) {
             bitmap_blocks[i] = 0;
@@ -117,10 +123,16 @@ void load(const char *source) {
         }
 
     }
+    OFF_SET_BLOCK = sizeof (struct disk_block);
     printf("Hellooooo\n");
-    fclose(t_file);
 
 
+}
+
+int destroy_mkfs() {
+    free(inodes);
+    free(dbs);
+//    free(bitmap_blocks);
 }
 
 /** Load a File System */
@@ -297,9 +309,9 @@ int myopen(const char *pathname, int flags) {
     printf("count: %d\n Path: %s \n", dir_counter, path);
 
     /* allocate space for all the arguments */
-    char **temp_path = (char **) calloc(dir_counter, sizeof(char *));
+    char **temp_path = (char **) malloc(dir_counter * sizeof(char *));
     for (int i = 0; i < dir_counter; i++) {
-        temp_path[i] = (char *) calloc(80, sizeof(char));
+        temp_path[i] = (char *) calloc(20, sizeof(char));
     }
 
     /* copy all the path arguments to the 2D (char *) array */
@@ -321,11 +333,15 @@ int myopen(const char *pathname, int flags) {
     for (int p = 1; p < dir_counter - 1; ++p) {
         mydirent *curr_directory = (struct mydirent *) &dbs[curr_dir_inode->first_block];
         printf("name of dir %s\n", curr_directory->d_name);
+        printf("HERE %d\n", curr_directory->num_of_files);
+//        printf("HERE %s\n", curr_directory->d_Inodes[0]->name);
+
+
         /** Iterate over the directory files, and check if the current path argument is present */
         for (int j = 0; j < curr_directory->num_of_files; ++j) {
             // if we find the file
-            printf("name of dir child -> %s\n", curr_directory->d_Inodes[j]->name);
-            if (strcmp(curr_directory->d_Inodes[j]->name, temp_path[p]) == 0) {
+            printf("name of dir child -> %s\n", inodes[curr_directory->d_fds[j]].name);
+            if (strcmp(inodes[curr_directory->d_fds[j]].name, temp_path[p]) == 0) {
                 curr_fd = find_inode(temp_path[p]);
 
                 break;
@@ -355,13 +371,12 @@ int myopen(const char *pathname, int flags) {
             /** update new inode address to inode array of the current directory , assign the dir_fd */
 
             printf("%d\n", curr_directory->num_of_files);
-            curr_directory->d_Inodes[curr_directory->num_of_files] = &inodes[dir_fd];
+            curr_directory->d_fds[curr_directory->num_of_files] = dir_fd;
             curr_directory->num_of_files++;
 
             curr_fd = dir_fd;
 
         }
-
         curr_dir_inode = &inodes[curr_fd];
 
     }
@@ -372,7 +387,7 @@ int myopen(const char *pathname, int flags) {
     printf("CHECK_num files %d\n", curr_directory->num_of_files);
     curr_fd = -1;
     for (int j = 0; j < curr_directory->num_of_files; ++j) {
-        if (strcmp(curr_directory->d_Inodes[j]->name, temp_path[dir_counter - 1]) == 0) {
+        if (strcmp(inodes[curr_directory->d_fds[j]].name, temp_path[dir_counter - 1]) == 0) {
             curr_fd = find_inode(temp_path[dir_counter - 1]);
             break;
         } else {
@@ -394,11 +409,10 @@ int myopen(const char *pathname, int flags) {
         }
         curr_fd = file_fd;
         printf("file_fd: %d\n", curr_fd);
+        curr_directory->d_fds[curr_directory->num_of_files] = curr_fd;
+        curr_directory->num_of_files++;
     }
 
-
-    curr_directory->d_Inodes[curr_directory->num_of_files] = &inodes[curr_fd];
-    curr_directory->num_of_files++;
     printf("FILE FOUND\n");
 
     /** FREE the temp_path */
@@ -447,8 +461,11 @@ void next_block(struct myopenfile *op) {
 
 /** read from a file */
 ssize_t myread(int myfd, void *buf, size_t count) {
-
+//    printf("%s\n", buf);
+    printf("HERE READ \n");
     myopenfile *curr_file = find_opened_file(myfd);
+    char *buffer = (char *) buf;
+    memset(buffer,0,count);
     if (curr_file == NULL) {
         printf("File is not opened or does not exist\n");
         exit(EXIT_FAILURE);
@@ -462,14 +479,15 @@ ssize_t myread(int myfd, void *buf, size_t count) {
     }
 //    int curr_block = inodes[myfd].first_block;
     for (int i = 0; i < num_of_blocks; ++i) {
-        while (curr_file->pos < BLOCK_SIZE) {
-            strcat_c(buf, curr_file->p_block->data[curr_file->pos]);
+        while (curr_file->pos < BLOCK_SIZE && count > 0) {
+            strcat_c(buffer, curr_file->p_block->data[curr_file->pos]);
             curr_file->pos++;
+            count--;
         }
         curr_file->pos = 0;
         next_block(curr_file);
     }
-    return strlen(buf);
+    return strlen(buffer);
 }
 
 int extend_block(struct disk_block *block) {
@@ -487,6 +505,7 @@ int extend_block(struct disk_block *block) {
 
 /** write to a file */
 ssize_t mywrite(int myfd, const void *buf, size_t count) {
+    printf("%s\n", (char*)buf);
     int buf_pointer = 0;
     char *buffer = (char *) buf;
     myopenfile *curr_file = find_opened_file(myfd);
@@ -494,9 +513,10 @@ ssize_t mywrite(int myfd, const void *buf, size_t count) {
         printf("File is not opened or does not exist\n");
         return buf_pointer;
     }
-    while (buf_pointer < strlen(buffer)) {
-        while (curr_file->pos < BLOCK_SIZE) {
+    while (buf_pointer < strlen(buffer) ) {
+        while (curr_file->pos < BLOCK_SIZE && count > 0) {
             curr_file->p_block->data[curr_file->pos++] = buffer[buf_pointer++];
+            count--;
         }
         curr_file->pos = 0;
 

@@ -4,13 +4,14 @@
 #include "fcntl.h"
 
 int main() {
-    mymkfs(10000);
+//    mymkfs(10000);
 
 
-//    mymount(NULL, "my_file.txt", NULL, NULL, NULL);
+    mymount(NULL, "my_file.txt", NULL, NULL, NULL);
+    printf("HI\n");
 //    allocate_file("hello");
     myopen("root/hello/OKOKOK", O_CREAT);
-    myopen("root/hello/SABABA", O_CREAT);
+//    myopen("root/hello/SABABA", O_CREAT);
 
     print_fs();
     save("my_file.txt");

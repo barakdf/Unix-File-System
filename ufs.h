@@ -65,7 +65,7 @@ typedef struct myopenfile {
 
 superBlock sb;
 inode *inodes;
-void *dbs;
+disk_block *dbs;
 
 /** Initialize new File System */
 void mymkfs(int );

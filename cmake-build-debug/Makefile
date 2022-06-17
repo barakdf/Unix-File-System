@@ -204,6 +204,33 @@ ufs.c.s:
 	$(MAKE) -f CMakeFiles/Unix_File_System.dir/build.make CMakeFiles/Unix_File_System.dir/ufs.c.s
 .PHONY : ufs.c.s
 
+ufs_test.o: ufs_test.c.o
+
+.PHONY : ufs_test.o
+
+# target to build an object file
+ufs_test.c.o:
+	$(MAKE) -f CMakeFiles/Unix_File_System.dir/build.make CMakeFiles/Unix_File_System.dir/ufs_test.c.o
+.PHONY : ufs_test.c.o
+
+ufs_test.i: ufs_test.c.i
+
+.PHONY : ufs_test.i
+
+# target to preprocess a source file
+ufs_test.c.i:
+	$(MAKE) -f CMakeFiles/Unix_File_System.dir/build.make CMakeFiles/Unix_File_System.dir/ufs_test.c.i
+.PHONY : ufs_test.c.i
+
+ufs_test.s: ufs_test.c.s
+
+.PHONY : ufs_test.s
+
+# target to generate assembly for a file
+ufs_test.c.s:
+	$(MAKE) -f CMakeFiles/Unix_File_System.dir/build.make CMakeFiles/Unix_File_System.dir/ufs_test.c.s
+.PHONY : ufs_test.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -222,6 +249,9 @@ help:
 	@echo "... ufs.o"
 	@echo "... ufs.i"
 	@echo "... ufs.s"
+	@echo "... ufs_test.o"
+	@echo "... ufs_test.i"
+	@echo "... ufs_test.s"
 .PHONY : help
 
 

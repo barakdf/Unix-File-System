@@ -91,6 +91,9 @@
 		<Unit filename="/mnt/c/Users/barak/Documents/GitHub/Unix-File-System/ufs.h">
 			<Option target="Unix_File_System"/>
 		</Unit>
+		<Unit filename="/mnt/c/Users/barak/Documents/GitHub/Unix-File-System/ufs_test.c">
+			<Option target="Unix_File_System"/>
+		</Unit>
 		<Unit filename="/mnt/c/Users/barak/Documents/GitHub/Unix-File-System/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

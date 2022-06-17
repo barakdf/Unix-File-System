@@ -192,6 +192,7 @@ int allocate_file(char name[8]) {
     }
 
     inodes[available_inode].first_block = available_block;
+    inodes[available_inode].size ++;
     disk_block *temp = (struct disk_block *) &dbs[available_block];
     temp->next_block_num = -2;
 
@@ -506,6 +507,7 @@ int extend_block(struct disk_block *block) {
 /** write to a file */
 ssize_t mywrite(int myfd, const void *buf, size_t count) {
     printf("%s\n", (char*)buf);
+    inode *current_inode = &inodes[myfd];
     int buf_pointer = 0;
     char *buffer = (char *) buf;
     myopenfile *curr_file = find_opened_file(myfd);
@@ -516,6 +518,7 @@ ssize_t mywrite(int myfd, const void *buf, size_t count) {
     while (buf_pointer < strlen(buffer) ) {
         while (curr_file->pos < BLOCK_SIZE && count > 0) {
             curr_file->p_block->data[curr_file->pos++] = buffer[buf_pointer++];
+            current_inode->size++;
             count--;
         }
         curr_file->pos = 0;
@@ -595,6 +598,6 @@ int myopendir(const char *name) {
 }
 
 struct mydirent *myreaddir(int fd) {
-
+    return (struct mydirent *) &dbs[fd];
 }
 

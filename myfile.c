@@ -3,8 +3,9 @@
 //
 
 #include "myfile.h"
+#include <stdarg.h>
 
-int extend_block(struct disk_block *block) {
+int extended_block(struct disk_block *block) {
     for (int i = 0; i < sb.num_blocks; ++i) {
         if (bitmap_blocks[i] == 0) {
             block->next_block_num = i;
@@ -31,7 +32,7 @@ ssize_t write_data(int fd, const void *buf, size_t count) {
 
         /* in case we need to extend the file length */
         if (p_block->next_block_num == -2) {
-            int find = extend_block(p_block);
+            int find = extended_block(p_block);
             if (find == -1) {
                 printf("Not enough space\n");
                 return buf_pointer;
@@ -43,7 +44,7 @@ ssize_t write_data(int fd, const void *buf, size_t count) {
     return buf_pointer;
 }
 
-void strcat_c(char *str, char c) {
+void fstrcat_c(char *str, char c) {
     for (; *str; str++);
     *str++ = c;
     *str++ = 0;
@@ -62,7 +63,7 @@ size_t read_data(int fd, char *buf, int count) {
 //    int curr_block = inodes[myfd].first_block;
     for (;;) {
         while (pos < BLOCK_SIZE) {
-            strcat_c(buf, p_block->data[pos]);
+            fstrcat_c(buf, p_block->data[pos]);
             pos++;
         }
         pos = 0;
@@ -198,16 +199,76 @@ size_t myfwrite(const void *ptr, size_t size, size_t nmemb, myFILE *stream) {
 }
 
 int myfseek(myFILE *stream, long offset, int whence) {
-    if(whence == SEEK_CUR) {
+    if (whence == SEEK_CUR) {
         stream->seek_pos += offset;
-    } else if(whence == SEEK_END) {
+    } else if (whence == SEEK_END) {
         stream->seek_pos = stream->size + offset;
-    } else if(whence == SEEK_SET) {
+    } else if (whence == SEEK_SET) {
         stream->seek_pos = offset;
     }
     // if the offset moved the seek pointer below zero.
-    if(stream->seek_pos < 0) {
+    if (stream->seek_pos < 0) {
         stream->seek_pos = 0;
     }
     return stream->seek_pos;
+}
+
+int myfscanf(myFILE *stream, const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+    char *storage;
+    int i = 0, j = 0;
+    while (format != 0 && format[i] != 0) {
+        if(format[i] == '%') {
+            if(format[i+1] == 'd') {
+                *(int *) va_arg(args, int *) = strtol(&stream->data[j], &storage, 10);
+                j+= strlen(storage) - stream->size;
+            }
+            else if (format[i+1] == 'f') {
+                *(double *) va_arg(args, double *) = strtol(&stream->data[j], &storage, 10);
+                j+= strlen(storage) - stream->size;
+            }
+            else if (format[i + 1] == 'c') {
+                *(char *) va_arg(args, char *) = stream->data[j];
+            }
+            i++;
+        }
+        i++;
+        j++;
+    }
+    return 1;
+}
+
+int myfprintf(myFILE *stream, const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+    int len = strlen(format);
+    int counter = 0;
+    for (int i = 0; i < len; ++i) {
+        /** if the next char is an argument symbol, we check what is the type and then write*/
+        if (format[i] == '%') {
+            if (format[i + 1] == 'd') { // represent Integer argument
+                int temp_int = va_arg(args, int);
+                myfwrite(&temp_int, sizeof(int ), 1, stream);
+                counter++;
+            } else if (format[i + 1] == 'f') { // represent float argument
+                float temp_float = va_arg(args, double);
+                myfwrite(&temp_float, sizeof(float ), 1, stream);
+                counter++;
+            } else if (format[i + 1] == 'c') { // represent char argument
+                char temp_char = va_arg(args, int);
+                myfwrite(&temp_char, sizeof (char ), 1, stream);
+                counter++;
+            }
+            i++;
+        } else {
+            /** if the next char is not an argument symbol, we write the text until we get one.*/
+            while (format[i] != '%' && i < len) {
+                char temp_regular_char = format[i++];
+                myfwrite(&temp_regular_char, sizeof (char ), 1, stream);
+            }
+            i--;
+        }
+    }
+    return counter;
 }

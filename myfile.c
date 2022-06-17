@@ -83,14 +83,7 @@ myFILE *myfopen(const char *pathname, const char *mode) {
     my_File->size = inodes[fd].size;
     /** In case the requested type file is Directory */
     if (inodes->type == Directory) {
-//        mydirent *f_data = (struct mydirent *)&dbs[inodes[fd].first_block];
-//        my_File->type = Directory;
-//        my_File->dir = malloc(sizeof (struct mydirent));
-//        for (int i = 0; i < f_data->num_of_files; ++i) {
-//            my_File->dir->d_Inodes[i] = f_data->d_Inodes[i];
-//        }
-//        my_File->dir->num_of_files = f_data->num_of_files;
-//        strcpy(my_File->dir->d_name,f_data->d_name);
+
         return NULL;
     } else {
         disk_block *f_data = (struct disk_block *) &dbs[inodes[fd].first_block];

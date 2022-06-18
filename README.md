@@ -15,7 +15,7 @@ This project represent a Unix file system in a file.
 </div>
 
 
-###Create new ufs
+### Create new ufs
 
 * mymkfs(s)
   * Parameter s will be the size of the file system file.
@@ -29,7 +29,7 @@ This project represent a Unix file system in a file.
 
 
 
-###Handle files in the system
+### Handle files in the system
 In order to read/write into a file, you must open it first using  myopen()
 * myopen(path, flag)
   * Path parameter defines which file to open from the f_system.

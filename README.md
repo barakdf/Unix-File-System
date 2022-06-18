@@ -18,12 +18,13 @@ This project represent a Unix file system in a file.
 ###Create new ufs
 
 * mymkfs(s)
+  * Parameter s will be the size of the file system file.
 
 
 ### Load\Save
 * mymount()
-  * first parameter is the path where you want to save the mounted file_system.
-  * second parameter is the path of the loaded file_system.
+  * First parameter is the path where you want to save the mounted file_system.
+  * Second parameter is the path of the loaded file_system.
 
 
 
@@ -31,17 +32,18 @@ This project represent a Unix file system in a file.
 ###Handle files in the system
 In order to read/write into a file, you must open it first using  myopen()
 * myopen(path, flag)
-  * path parameter defines which file to open from the f_system.
-  * flag parameter determine the decisions of the program in case the requested file or any directory in the path do not exist.
-    * pass O_CREAT flag to the function to open a new file in case it does not exist.
-  * return the file descriptor of the file.
+  * Path parameter defines which file to open from the f_system.
+  * Flag parameter determine the decisions of the program in case the requested file or any directory in the path do not exist.
+    * Pass O_CREAT flag to the function to open a new file in case it does not exist.
+  * RETURN the file descriptor of the file.
 
 Write to file:
 * mywrite(fd,buf,count)
   * fd parameter will be the file descriptor of the file, returned from myopen()
   * buf parameter is a provided char* from the user that contain the context of what to write.
   * count parameter is the off-set that tells the program how many chars to write.
-* return the number of writen bytes
+  * RETURN the number of writen bytes
+
 
 read from file:
 
@@ -49,7 +51,7 @@ read from file:
   * fd parameter will be the file descriptor of the file, returned from myopen()
   * buf parameter is a provided char* from the user that will be filled with the content from the file.
   * count parameter is the off-set that tells the program how many chars to read from the file.
-* return the number of bytes that we read.
+  * RETURN the number of bytes that we read.
 
 handle write/read file pointer:
 
@@ -60,11 +62,20 @@ handle write/read file pointer:
     * SEEK_SET - set the pointer to the beginning of the file.
     * SEEK_CUR - current position of the pointer
     * SEEK_END - set the pointer to the end of the file.
-  *return the position of the pointer.
+  * RETURN the position of the pointer.
 ### Test 
 <div dir='ltr'>
 
     ./test
+
+
+</div>
+
+#### At the end don't forget to call destroy_mkmfs()
+
+<div dir='ltr'>
+
+    ./make clean
 
 
 </div>

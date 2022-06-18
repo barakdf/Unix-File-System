@@ -30,22 +30,22 @@ int main() {
     int sababa = myopen("root/hello/SABABA", O_CREAT);
     char write_text[1024];
     strcpy(write_text, "Hello World");
-    printf("size of write text is -> %d\n", strlen(write_text));
+//    printf("size of write text is -> %d\n", strlen(write_text));
 
 
 
     int pointer = mywrite(ok, write_text, strlen(write_text));
 
-    if(pointer == 11) {
+    if (pointer == 11) {
         printf("~~~~~~~~~~ pointer-test Passed\n");
     } else {
         printf("~~~~~~~~~~ pointer-test Failed !!\n");
     }
 
     printf("curr pointer -> %d\n", pointer);
-    int pos =mylseek(ok,0,SEEK_SET);
+    int pos = mylseek(ok, 0, SEEK_SET);
 
-    if(pos == 0) {
+    if (pos == 0) {
         printf("~~~~~~~~~~ pointer-test Passed\n");
     } else {
         printf("~~~~~~~~~~ pointer-test Failed !!\n");
@@ -54,10 +54,10 @@ int main() {
     char read_text[1024];
     myread(ok, read_text, 5);
 
-    if(!strcmp(read_text,"Hello")) {
+    if (!strcmp(read_text, "Hello")) {
         printf("~~~~~~~~~~ read-test Passed\n");
     } else {
-        printf("~~~~~~~~~~ read-test Failed !!,\n ex -> Hello | actual -> %s\n",read_text);
+        printf("~~~~~~~~~~ read-test Failed !!,\n ex -> Hello | actual -> %s\n", read_text);
     }
 
     myclose(ok);
@@ -75,40 +75,37 @@ int main() {
     ok = myopen("root/hello/OKOKOK", O_CREAT);
     sababa = myopen("root/hello/SABABA", O_CREAT);
 
-    memset(write_text,0, strlen(write_text));
+    memset(write_text, 0, strlen(write_text));
     strcpy(write_text, "Hello World");
-
-    printf("CHECK WHAT I WRITE %s\n", write_text);
 
     printf("size of write text is -> %ld\n", strlen(write_text));
 
     pointer = mywrite(ok, write_text, strlen(write_text));
 
-    if(pointer == 11) {
+    if (pointer == 11) {
         printf("~~~~~~~~~~ pointer-test Passed\n");
     } else {
         printf("~~~~~~~~~~ pointer-test Failed !!\n");
     }
 
     printf("curr pointer -> %d\n", pointer);
-    pos = mylseek(ok,0,SEEK_SET);
+    pos = mylseek(ok, 0, SEEK_SET);
 
-    if(pos == 0) {
+    if (pos == 0) {
         printf("~~~~~~~~~~ pointer-test Passed\n");
     } else {
         printf("~~~~~~~~~~ pointer-test Failed !!\n");
     }
 
-    memset(read_text,0, strlen(read_text));
+    memset(read_text, 0, strlen(read_text));
 
     int nunbytes = myread(ok, read_text, 5);
 
-    printf("HOW MANY i READ %d\n", nunbytes);
 
-    if(!strcmp(read_text,"Hello")) {
+    if (!strcmp(read_text, "Hello")) {
         printf("~~~~~~~~~~~~~~~ read-test Passed\n");
     } else {
-        printf("~~~~~~~~~~ read-test Failed !!,\n ex -> Hello | actual -> %s\n",read_text);
+        printf("~~~~~~~~~~ read-test Failed !!,\n ex -> Hello | actual -> %s\n", read_text);
     }
 
     myclose(ok);

@@ -70,7 +70,7 @@ int main() {
 
 
 
-    /** */
+    /** load the previous saved file system and then try the methods.*/
     mymount(NULL, "my_file.txt", NULL, NULL, NULL);
     ok = myopen("root/hello/OKOKOK", O_CREAT);
     sababa = myopen("root/hello/SABABA", O_CREAT);
